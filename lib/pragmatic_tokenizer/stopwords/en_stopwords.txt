@@ -256,7 +256,6 @@ re
 really
 replied
 reply
-rt
 said
 said
 same

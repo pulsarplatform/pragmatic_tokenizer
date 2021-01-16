@@ -86,10 +86,12 @@ module PragmaticTokenizer
     ENDS_WITH_PUNCTUATION1        = /#{PUNCTUATION1.source}$/
     ENDS_WITH_PUNCTUATION2        = /#{PUNCTUATION2.source}$/
     ENDS_WITH_COLON2              = /#{COLON2.source}$/
+    ENDS_WITH_COLON2              = /#{COLON2.source}$/
     ENDS_WITH_UNDERSCORE          = /#{UNDERSCORE.source}$/
     ENDS_WITH_ONES_EXCLAMATIONS   = /#{ONES_EXCLAMATIONS.source}$/
     ENDS_WITH_EXCITED_ONE         = /#{ONE_AS_EXCLAMATION.source}$/
     ENDS_WITH_APOSTROPHE_AND_S    = /#{APOSTROPHE_AND_S.source}$/
+    ENDS_WITH_POINT               = /\.$/
     ENDS_WITH_ALPHA               = /[[:alpha:]]$/
     ENDS_WITH_DIGIT               = /[[:digit:]]$/
 
@@ -126,6 +128,7 @@ module PragmaticTokenizer
 
     IRRELEVANT_CHARACTERS = Regexp.union(
         STARTS_WITH_PUNCTUATION3,
+        ENDS_WITH_POINT,
         ENDS_WITH_COLON2,
         ENDS_WITH_ONES_EXCLAMATIONS,
         CONTROL_CHARACTER,

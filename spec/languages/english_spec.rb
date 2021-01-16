@@ -571,7 +571,7 @@ describe PragmaticTokenizer do
           pt = PragmaticTokenizer::Tokenizer.new(
               clean: true
           )
-          expect(pt.tokenize(text)).to eq(["hello", "."])
+          expect(pt.tokenize(text)).to eq(["hello"])
         end
 
         it 'tokenizes a string #002' do
@@ -579,7 +579,7 @@ describe PragmaticTokenizer do
           pt = PragmaticTokenizer::Tokenizer.new(
               clean: true
           )
-          expect(pt.tokenize(text)).to eq(["hello", "."])
+          expect(pt.tokenize(text)).to eq(["hello"])
         end
 
         it 'tokenizes a string #003' do
@@ -1256,9 +1256,9 @@ describe PragmaticTokenizer do
               numbers:             :none,
               punctuation:         :none
           )
-          check = ["jonas", "jonas", "smith", "jonas", "smith", "turn", "jane", "party", "closed", "deal", "pitt", "briggs", "noon", "jane", "closed", "deal", "pitt", "briggs", "closed", "yesterday", "mt.", "fuji", "st.", "michael's", "church", "st.", "light", "jfk", "jr.", "book", "visited", "u.s.a.", "year", "live", "e.u.", "live", "u.s.", "work", "u.s.", "government", "virginia", "lived", "u.s.", "years", "bag", "bag", "teaches", "science", "worked", "years", "engineer", "local", "university", "email", "jane.doe@example.com", "email", "site", "check", "turned", "great", "turned", "great", "turned", "great", "held", "book", "long", "time", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "list", "item", "sentence", "cut", "middle", "pdf", "cold", "night", "city", "features", "contact", "manager", "events", "activities", "treasure", "works", "yahoo", "accounting", "department", "good", "team", "albert", "jones", "yesterday", "thoreau", "argues", "simplifying", "one’s", "life", "laws", "universe", "complex", "bohr", "analogy", "parallel", "stairways", "smith", "left", "sentence", "omission", "ellipsis", "marks", "preceded", "space", "sentence", "period", "sentence", "meant", "left", "store", "habit", "weakened", "combining", "self-interpreting", "compounds", "practice", "abandoned"]
-          puts (pt.tokenize(text) - check).inspect
-          expect(pt.tokenize(text)).to eq(check)
+          check = ["jonas", "jonas", "smith", "jonas", "smith", "turn", "jane", "party", "closed", "deal", "pitt", "briggs", "noon", "jane", "closed", "deal", "pitt", "briggs", "closed", "yesterday", "fuji", "michael's", "church", "light", "jfk", "book", "visited", "u.s.a", "year", "live", "e.u", "live", "u.s", "work", "u.s", "government", "virginia", "lived", "u.s", "years", "bag", "bag", "teaches", "science", "worked", "years", "engineer", "local", "university", "email", "jane.doe@example.com", "email", "site", "check", "turned", "great", "turned", "great", "turned", "great", "held", "book", "long", "time", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "list", "item", "sentence", "cut", "middle", "pdf", "cold", "night", "city", "features", "contact", "manager", "events", "activities", "treasure", "works", "yahoo", "accounting", "department", "good", "team", "albert", "jones", "yesterday", "thoreau", "argues", "simplifying", "one’s", "life", "laws", "universe", "complex", "bohr", "analogy", "parallel", "stairways", "smith", "left", "sentence", "omission", "ellipsis", "marks", "preceded", "space", "sentence", "period", "sentence", "meant", "left", "store", "habit", "weakened", "combining", "self-interpreting", "compounds", "practice", "abandoned"]
+          tokenized = pt.tokenize(text)
+          expect(tokenized).to eq(check)
         end
 
         it 'handles long strings 2' do
@@ -1272,7 +1272,7 @@ describe PragmaticTokenizer do
               numbers:             :none,
               punctuation:         :none
           )
-          expect(pt.tokenize(text)).to eq(["jonas", "jonas", "smith", "jonas", "smith", "turn", "jane", "party", "closed", "deal", "pitt", "briggs", "noon", "jane", "closed", "deal", "pitt", "briggs", "closed", "yesterday", "mt.", "fuji", "st.", "michael's", "church", "st.", "light", "jfk", "jr.", "book", "visited", "u.s.a.", "year", "live", "e.u.", "live", "u.s.", "work", "u.s.", "government", "virginia", "lived", "u.s.", "years", "bag", "bag", "teaches", "science", "worked", "years", "engineer", "local", "university", "email", "jane.doe@example.com", "email", "site", "check", "turned", "great", "turned", "great", "turned", "great", "held", "book", "long", "time", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "list", "item", "sentence", "cut", "middle", "pdf", "cold", "night", "city", "features", "contact", "manager", "events", "activities", "treasure", "works", "yahoo", "accounting", "department", "good", "team", "albert", "jones", "yesterday", "thoreau", "argues", "simplifying", "one’s", "life", "laws", "universe", "complex", "bohr", "analogy", "parallel", "stairways", "smith", "left", "sentence", "omission", "ellipsis", "marks", "preceded", "space", "sentence", "period", "sentence", "meant", "left", "store", "habit", "weakened", "combining", "self-interpreting", "compounds", "practice", "abandoned"] * 10)
+          expect(pt.tokenize(text)).to eq(["jonas", "jonas", "smith", "jonas", "smith", "turn", "jane", "party", "closed", "deal", "pitt", "briggs", "noon", "jane", "closed", "deal", "pitt", "briggs", "closed", "yesterday", "fuji", "michael's", "church", "light", "jfk", "book", "visited", "u.s.a", "year", "live", "e.u", "live", "u.s", "work", "u.s", "government", "virginia", "lived", "u.s", "years", "bag", "bag", "teaches", "science", "worked", "years", "engineer", "local", "university", "email", "jane.doe@example.com", "email", "site", "check", "turned", "great", "turned", "great", "turned", "great", "held", "book", "long", "time", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "item", "list", "item", "sentence", "cut", "middle", "pdf", "cold", "night", "city", "features", "contact", "manager", "events", "activities", "treasure", "works", "yahoo", "accounting", "department", "good", "team", "albert", "jones", "yesterday", "thoreau", "argues", "simplifying", "one’s", "life", "laws", "universe", "complex", "bohr", "analogy", "parallel", "stairways", "smith", "left", "sentence", "omission", "ellipsis", "marks", "preceded", "space", "sentence", "period", "sentence", "meant", "left", "store", "habit", "weakened", "combining", "self-interpreting", "compounds", "practice", "abandoned"] * 10)
         end
 
         it 'handles markdown' do
@@ -1304,7 +1304,7 @@ describe PragmaticTokenizer do
               language: 'en',
               clean:    true
           )
-          expect(pt.tokenize(text)).to eq(["hello", "test", "."])
+          expect(pt.tokenize(text)).to eq(["hello", "test"])
         end
 
         it 'splits too long words with hypens' do

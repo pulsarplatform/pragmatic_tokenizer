@@ -18,6 +18,7 @@ module PragmaticTokenizer
     SPACE                     = ' '.freeze
     SINGLE_QUOTE              = "'".freeze
 
+    COMMON_STOPWORDS = File.open(File.expand_path("../stopwords/common.txt", __FILE__)).read.split("\n").freeze
     # @param [Hash] opts optional arguments
 
     # @option opts [Array] :filter_languages - user-supplied array of languages from which that language's stop words, abbreviations and contractions should be used when calculating the resulting tokens - array elements should be of the String class or can be symbols
@@ -80,13 +81,14 @@ module PragmaticTokenizer
       @contractions.merge!(@language_module::CONTRACTIONS) if @contractions.empty?
       @abbreviations       += @language_module::ABBREVIATIONS if @abbreviations.empty?
       @stop_words          += @language_module::STOP_WORDS if @stop_words.empty?
-
+      
       @filter_languages.each do |lang|
         language = Languages.get_language_by_code(lang)
         @contractions.merge!(language::CONTRACTIONS)
         @abbreviations += language::ABBREVIATIONS
         @stop_words    += language::STOP_WORDS
       end
+      @stop_words += COMMON_STOPWORDS
 
       raise "Punctuation argument can be only be nil, :all, :semi, :none, or :only" unless PUNCTUATION_OPTIONS.include?(@punctuation)
       raise "Numbers argument can be only be nil, :all, :semi, :none, or :only" unless NUMBERS_OPTIONS.include?(@numbers)
@@ -112,7 +114,7 @@ module PragmaticTokenizer
 
       def process_segment(segment)
         pre_processed = pre_process(segment)
-        @tokens       = PostProcessor.new(text: pre_processed, abbreviations: @abbreviations, downcase: @downcase).call	        
+        @tokens       = PostProcessor.new(text: pre_processed, abbreviations: @abbreviations, downcase: @downcase).call
         post_process_tokens
      end
 
