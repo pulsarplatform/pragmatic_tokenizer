@@ -86,7 +86,6 @@ module PragmaticTokenizer
     ENDS_WITH_PUNCTUATION1        = /#{PUNCTUATION1.source}$/
     ENDS_WITH_PUNCTUATION2        = /#{PUNCTUATION2.source}$/
     ENDS_WITH_COLON2              = /#{COLON2.source}$/
-    ENDS_WITH_COLON2              = /#{COLON2.source}$/
     ENDS_WITH_UNDERSCORE          = /#{UNDERSCORE.source}$/
     ENDS_WITH_ONES_EXCLAMATIONS   = /#{ONES_EXCLAMATIONS.source}$/
     ENDS_WITH_EXCITED_ONE         = /#{ONE_AS_EXCLAMATION.source}$/

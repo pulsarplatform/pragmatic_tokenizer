@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-TOKENIZER = PragmaticTokenizer::Tokenizer.new(
+tokenizer = PragmaticTokenizer::Tokenizer.new(
   remove_stop_words: false,
   punctuation: :none,
   minimum_length: 1,
@@ -12,7 +12,7 @@ TOKENIZER = PragmaticTokenizer::Tokenizer.new(
     ['@BonaFried Tier 1/2 1/2/3 a/b a/b/c a/1 a/1/2 a/1/b 1/a 1/a/2 1/a/b ./. Nurse', ["@BonaFried", "Tier", "1/2", "1/2/3", "a/b", "a/b/c", "a/1", "a/1/2", "a/1/b", "1/a", "1/a/2", "1/a/b", "Nurse"]],
     ['http://www.pippo.it/page1/page2', ["http://www.pippo.it/page1/page2"]],
     ['https://t.co/sBxuC8iS34', ['https://t.co/sBxuC8iS34']],
-    ['http://www.pippo.it/page1/page2?foo=bar&BAR=%28sss()%67=*', ["http://www.pippo.it/page1/page2?foo=bar&BAR=%28sss()%67=*"]],
+    ['http://www.pippo.it/page1/page2?foo=bar&BAR=%28foo()%67=*', ["http://www.pippo.it/page1/page2?foo=bar&BAR=%28foo()%67=*"]],
     ['/testword', ['testword']],
     ['testword/', ['testword']],
     ['test/word', ['test/word']],
@@ -22,7 +22,7 @@ TOKENIZER = PragmaticTokenizer::Tokenizer.new(
 describe PragmaticTokenizer do
   EDGE_CASES.each do |text, expected|
     it "#{text}" do
-      tokenized = TOKENIZER.tokenize(text)
+      tokenized = tokenizer.tokenize(text)
       expect(tokenized).to eq(expected)
     end
   end
