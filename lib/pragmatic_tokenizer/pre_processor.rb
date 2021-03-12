@@ -1,7 +1,10 @@
+require 'digest'
 module PragmaticTokenizer
   module PreProcessor
 
     def pre_process(language: Languages::Common)
+      @urls = {}
+      url_to_md5!
       remove_non_breaking_space!
       shift_various_characters!
       replace_colon_in_url!
@@ -11,10 +14,26 @@ module PragmaticTokenizer
       convert_single_quotes!(language)
       convert_acute_accent_s!
       shift_hyphens!
+      md5_to_urls!
       squeeze(' '.freeze)
     end
 
     private
+
+      def url_to_md5!
+        URI.extract(self, %w(http https ftp)).each do |url|
+          md5 = Digest::MD5.hexdigest(url)
+          @urls[md5] = url
+          gsub!(url, md5)
+        end
+      end
+
+      def md5_to_urls!
+        @urls.each do |k, v|
+          gsub!(k, v)
+        end
+      end
+
       def remove_non_breaking_space!
         gsub!(Regex::NO_BREAK_SPACE, ''.freeze)
       end

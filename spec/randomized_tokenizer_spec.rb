@@ -91,7 +91,7 @@ describe PragmaticTokenizer do
     tests << [in_words_shuffle_string, out_words_shuffle_string]
   end
 
-  TOKENIZER = PragmaticTokenizer::Tokenizer.new(
+  tokenizer = PragmaticTokenizer::Tokenizer.new(
     remove_stop_words: false,
     punctuation: :none,
     minimum_length: 1,
@@ -101,15 +101,15 @@ describe PragmaticTokenizer do
 
   lut.map do |test, check|
     it "Testing no currency case: #{test}" do
-      tokenized = TOKENIZER.tokenize(test).join(' ')
+      tokenized = tokenizer.tokenize(test).join(' ')
       expect(tokenized).to eq(check)
     end
   end
 
   tests.uniq.each_with_index do |test, i|
-    it "Testing no currency case #{i}: #{test[0][0..9]}..." do
+    it "Testing no currency case #{i}: #{test[0][0..100]}..." do
       check = test[1]
-      tokenized = TOKENIZER.tokenize(test[0]).join(' ')
+      tokenized = tokenizer.tokenize(test[0]).join(' ')
       # puts "ORIGINAL"
       # puts test[0]
       # puts "TOKENIZED"
@@ -135,72 +135,72 @@ describe PragmaticTokenizer do
     not_supported = [[9760, 65039], [9728, 65039], [9729, 65039], [9730, 65039], [9731, 65039], [9732, 65039], [9762, 65039], [9763, 65039], [9766, 65039], [9774, 65039], [169, 65039], [174, 65039], [8482, 65039], [42, 65039, 8419], [9410, 65039], [127988, 8205, 9760, 65039]]
     supported_unpacked = emoji.map{|e| e.unpack("U*")} - not_supported
     supported_packed = supported_unpacked.map{|e| e.pack("U*")}
-    tokenized = TOKENIZER.tokenize(supported_packed.join(' '))
+    tokenized = tokenizer.tokenize(supported_packed.join(' '))
     expect(tokenized).to eq(supported_packed)
   end
 
   it 'Testing currency after no space' do
     text = 'http://community.giffgaff.com RT @Diegyms: Mira la evolución de los generos músicales 50cent contemporáneos 20$ en 20 segundos. http://t.co/PI7EqoLwPG vía @ThomsonHolidays london5th o2'
     check= 'http://community.giffgaff.com rt @Diegyms mira la evolución de los generos músicales 50cent contemporáneos 20$ en 20 segundos http://t.co/PI7EqoLwPG vía @ThomsonHolidays london5th o2'
-    expect(TOKENIZER.tokenize(text.dup).join(' ')).to eq(check)
+    expect(tokenizer.tokenize(text.dup).join(' ')).to eq(check)
   end
 
   it 'Testing currency after with space' do
     text = 'Ahí les va una pista del siguiente episodio de 12.00 $ #12especialesmasunoyundiademuertos en @r101ck http://t.co/lyDrfEBkHO'
     check = 'ahí les va una pista del siguiente episodio de 12.00 #12especialesmasunoyundiademuertos en @r101ck http://t.co/lyDrfEBkHO'
-    expect(TOKENIZER.tokenize(text.dup).join(' ')).to eq(check)
+    expect(tokenizer.tokenize(text.dup).join(' ')).to eq(check)
   end
 
   it 'Testing currency before with no space' do
     text = 'Ahí les va una pista del siguiente episodio de $12.00 #12especialesmasunoyundiademuertos en @r101ck http://t.co/lyDrfEBkHO'
     check = 'ahí les va una pista del siguiente episodio de $12.00 #12especialesmasunoyundiademuertos en @r101ck http://t.co/lyDrfEBkHO'
-    expect(TOKENIZER.tokenize(text.dup).join(' ')).to eq(check)
+    expect(tokenizer.tokenize(text.dup).join(' ')).to eq(check)
   end
 
   it 'Testing currency before with space' do
     text = 'Ahí les va una pista del siguiente episodio de $ 12.00 #12especialesmasunoyundiademuertos en @r101ck http://t.co/lyDrfEBkHO'
     check = 'ahí les va una pista del siguiente episodio de 12.00 #12especialesmasunoyundiademuertos en @r101ck http://t.co/lyDrfEBkHO'
-    expect(TOKENIZER.tokenize(text.dup).join(' ')).to eq(check)
+    expect(tokenizer.tokenize(text.dup).join(' ')).to eq(check)
   end
 
   it 'Testing words with special text and numbers' do
     text  = "123_test VPL-FHZ58 VPL-FHZ58 one-two asd-123 poi_poi_123_sdfg 'asd'123 _asd&123"
     check = "123_test vpl-fhz58 vpl-fhz58 one-two asd-123 poi_poi_123_sdfg asd'123 asd&123"
-    expect(TOKENIZER.tokenize(text.dup).join(' ')).to eq(check)
+    expect(tokenizer.tokenize(text.dup).join(' ')).to eq(check)
   end
 
   it "Testing for malformed indexing \uFFFE⁣⁣" do
     text = "#ABLVDevents⁣⁣\n“Teeth Health & Beauty”⁣⁣\nJoin us tomorrow for GCC Oral Health Week Event under the supervision of Ministry of Health ⁣⁣\nand under the patronage of Dr. Fatma Mohammed Al Ajmi ⁣\n⁣⁣\nThursday 28 March 2019 from 4-8 pm at #AlAraimiBoulevard⁣⁣\n*Free Dental Examination⁣⁣\n*Awareness Programs⁣⁣\n*Kids Corner⁣⁣\n*Gifts and Other Surprises⁣⁣\n⁣.\n\"الأسنان صحة وجمال\"⁣⁣\nشاركوا معنا في فعالیة الأسبوع الخلیجي الموحد لتعزیز صحة الفم والأسنان تحت إشراف \uFFFE#وزارة_الصحة وتحت رعایة الدكتورة ⁣⁣\nفاطمة بنت محمد العجمیة⁣\n⁣⁣\nالخمیس ٢٨ مارس ٢٠١٩ من ٤-٨ مساءاً في #العریمي_بولیفارد ⁣⁣\n*فحص مجاني للأسنان⁣⁣\n*أركان توعیة⁣⁣\n*ركن للاطفال⁣⁣\n*ھدایا ومفاجآت أخرى "
     check = '#ABLVDevents⁣⁣ teeth health beauty ⁣⁣ join us tomorrow for gcc oral health week event under the supervision of ministry of health ⁣⁣ and under the patronage of dr fatma mohammed al ajmi ⁣ ⁣⁣ thursday 28 march 2019 from 4-8 pm at #AlAraimiBoulevard⁣⁣ free dental examination⁣⁣ awareness programs⁣⁣ kids corner⁣⁣ gifts and other surprises⁣⁣ ⁣ الأسنان صحة وجمال ⁣⁣ شاركوا معنا في فعالیة الأسبوع الخلیجي الموحد لتعزیز صحة الفم والأسنان تحت إشراف #وزارة_الصحة وتحت رعایة الدكتورة ⁣⁣ فاطمة بنت محمد العجمیة⁣ ⁣⁣ الخمیس ٢٨ مارس ٢٠١٩ من ٤ ٨ مساءاً في #العریمي_بولیفارد ⁣⁣ فحص مجاني للأسنان⁣⁣ أركان توعیة⁣⁣ ركن للاطفال⁣⁣ ھدایا ومفاجآت أخرى'
-    expect(TOKENIZER.tokenize(text.dup).join(' ')).to eq(check)
+    expect(tokenizer.tokenize(text.dup).join(' ')).to eq(check)
   end
 
   it "Testing html" do
     text = '<script type="language/javascript">alert("foo")</script><div class="thread" id="t75360037"> <div class="postContainer opContainer" id="pc75360037"> <div id="p75360037" class="post op"> <div class="postInfoM mobile" id="pim75360037"> <span class="nameBlock"><span class="name">Anonymous</span><br><span class="subject"></span> </span><span class="dateTime postNum" data-utc="1586334960">04/08/20(Wed)04:36:00 <a href="#p75360037" title="Link to this post">No.</a><a href="javascript:quote(\'75360037\');" title="Reply to this post">75360037</a></span></div> <div class="file" id="f75360037"> <div class="fileText" id="fT75360037">File: <a href="//i.4cdn.org/g/1586334960971.jpg" target="_blank">thinkingpepe.jpg</a> (7 KB, 229x250)</div><a class="fileThumb" href="//i.4cdn.org/g/1586334960971.jpg" target="_blank"><img src="//i.4cdn.org/g/1586334960971s.jpg" alt="7 KB" data-md5="P1YV5O5Y4ILg2zeqOyy2gw==" style="height: 250px; width: 229px;"> <div data-tip data-tip-cb="mShowFull" class="mFileInfo mobile">7 KB JPG</div> </a> </div> <div class="postInfo desktop" id="pi75360037"><input type="checkbox" name="75360037" value="delete"> <span class="subject"></span> <span class="nameBlock"><span class="name">Anonymous</span> </span> <span class="dateTime" data-utc="1586334960">04/08/20(Wed)04:36:00</span> <span class="postNum desktop"><a href="#p75360037" title="Link to this post">No.</a><a href="javascript:quote(\'75360037\');" title="Reply to this post">75360037</a></span></div> <blockquote class="postMessage" id="m75360037">Guys im a new linux user. I turned off auto updates because one time it auto updated and fucked up my riced UI. <br>Is this OK? Or should i keep autoupdating everything and risk it breaking shit again?</blockquote> </div> </div> </div>'
     check = 'anonymous 04/08/20 wed 04:36:00 no 75360037 file thinkingpepe jpg 7 kb 229x250 7 kb jpg anonymous 04/08/20 wed 04:36:00 no 75360037 guys im a new linux user i turned off auto updates because one time it auto updated and fucked up my riced ui is this ok or should i keep autoupdating everything and risk it breaking shit again'
-    expect(TOKENIZER.tokenize(text.dup).join(' ')).to eq(check)
+    expect(tokenizer.tokenize(text.dup).join(' ')).to eq(check)
   end
 
   it "Testing malformed html" do
     text = 'foo bar <foo bar'
-    expect(TOKENIZER.tokenize(text.dup).join(' ')).to eq("foo bar foo bar")
+    expect(tokenizer.tokenize(text.dup).join(' ')).to eq("foo bar foo bar")
   end
 
   it 'Testing BBcode' do
     text = "[QUOTE=thecoltguy;3166727]Here are a few:\n\n\n\n\n\n\n\n\n[URL=\"https://private.fotki.com/thecoltguy/bankers-special/100-4671.html\"][IMG]https://media.fotki.com/2v2HvDqQUxA5Rgm.jpg[/IMG][/URL][/QUOTE]\n\nMost Excellent Outstanding Post. Good Job.\n\n\n[B][URL=\"https://www.coltforum.com/forums/attachments/colt-semiauto-pistols/281690d1490370011-got-hammerless-old.jpg\"][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][B][SIZE=3][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][SIZE=3][B][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][B][B][SIZE=3][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1][SIZE=3][B]ei8ht[/B][B][B][FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=1]®[/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/B][/SIZE][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/SIZE][/B][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/B][/SIZE][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/SIZE][/B][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/B][/URL][SIZE=3][URL=\"https://www.coltforum.com/forums/colt-semiauto-pistols/191777-got-hammerless.html\"]\nGot Hammerless?[/URL]                 [FONT=Comic Sans MS][SIZE=2][COLOR=black][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][FONT=arial][SIZE=2][COLOR=black][SIZE=2][SIZE=1]\n[SIZE=3][SIZE=2][B]OGCA Life Member[/B][/SIZE][/SIZE][/SIZE][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/SIZE][/COLOR][/SIZE][/FONT][/COLOR][/SIZE][/FONT][/SIZE][/B]              [URL=\"https://www.coltforum.com/forums/attachments/colt-semiauto-pistols/488306d1518063261-got-hammerless-lpd-22-23-6-copy.jpg\"] [/URL]"
     check = 'here are a few https://media.fotki.com/2v2HvDqQUxA5Rgm.jpg most excellent outstanding post good job ei8ht got hammerless ogca life member'
-    expect(TOKENIZER.tokenize(text.dup).join(' ')).to eq(check)
+    expect(tokenizer.tokenize(text.dup).join(' ')).to eq(check)
   end
 
   it 'Testing base64 images' do
     text = '<h1 class="fs14 pB10">Guggenheim\'s select 2019 #biotech catalysts (Jun \'19)</h1><div id="divMessageText" class="fs12 ceFontFix"><span style="font-size: 12pt;"><br /><div>&nbsp; fyi and dd </div><div>(Twitter; <a target="_blank" href="https://twitter.com/syinvesting/status/1140944747768324096">https://twitter.com/syinvesting/status/1140944747768324096 )</a></div><div>&nbsp;</div><div><img src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAlMAAAQFCAYAAACV="> <p>paragraph1</p> <img src="data:image/gif;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAlMAAAQFCAYAAACV="> <p>paragraph2</p> <img src="data:;base64,iVBORw0KGgoAAAANSUhEUgAAAlMAAAQFCAYAAACV="> <p>paragraph3</p> </div> </div>'
     check = "guggenheim's select 2019 #biotech catalysts jun 19 fyi and dd twitter https://twitter.com/syinvesting/status/1140944747768324096 paragraph1 paragraph2 paragraph3"
-    expect(TOKENIZER.tokenize(text.dup).join(' ')).to eq(check)
+    expect(tokenizer.tokenize(text.dup).join(' ')).to eq(check)
   end
 
   it 'Testing word ending with a 1' do
     text = 'testword testword1 testword2'
     check = ['testword', 'testword1', 'testword2']
-    expect(TOKENIZER.tokenize(text.dup)).to eq(check)
+    expect(tokenizer.tokenize(text.dup)).to eq(check)
   end
 end

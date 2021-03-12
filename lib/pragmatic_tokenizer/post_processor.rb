@@ -41,8 +41,9 @@ module PragmaticTokenizer
       def remove_symbols(token)
         chrs = token.chars
         is_string = chrs[1..-2].join('') =~ /[[:alpha:]]/
+        not_url = token =~ Regex::NOT_URL
         token.gsub!(/^[&`]|[&`]$/, '')
-        token.gsub!(/[<>%=]/, ' ') if is_string
+        token.gsub!(/[<>%=]/, ' ') if is_string && not_url
         token.strip
       end
 
