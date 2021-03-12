@@ -3,14 +3,16 @@ module PragmaticTokenizer
 
     def pre_process(language: Languages::Common)
       remove_non_breaking_space!
-      shift_various_characters!
-      replace_colon_in_url!
-      shift_remaining_colons!
-      shift_hashtag!
-      convert_double_quotes!
-      convert_single_quotes!(language)
-      convert_acute_accent_s!
-      shift_hyphens!
+      if self.strip =~ Regex::NOT_URL
+        shift_various_characters!
+        replace_colon_in_url!
+        shift_remaining_colons!
+        shift_hashtag!
+        convert_double_quotes!
+        convert_single_quotes!(language)
+        convert_acute_accent_s!
+        shift_hyphens!
+      end
       squeeze(' '.freeze)
     end
 
