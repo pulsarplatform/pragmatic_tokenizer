@@ -42,8 +42,8 @@ module PragmaticTokenizer
           text.gsub!(LORSQU_APOSTROPHE, '\1 lorsqu' << replacement << ' ')
           text.gsub!(PUISQU_APOSTROPHE, '\1 puisqu' << replacement << ' ')
           text.gsub!(QUOIQU_APOSTROPHE, '\1 quoiqu' << replacement << ' ')
+          text.gsub!(QUOTE_WORD,   ' '    << replacement << ' ')
           text.gsub!(ALNUM_QUOTE,  '\1 '  << replacement << ' ')
-          text.gsub!(QUOTE_WORD,   ' '    << replacement)
           text
         end
       end

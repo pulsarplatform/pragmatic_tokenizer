@@ -98,8 +98,8 @@ module PragmaticTokenizer
 
       class SingleQuotes
 
-        ALNUM_QUOTE     = /(\w|\D)'(?!')(?=\W|$)/
-        QUOTE_WORD      = /(\W|^)'(?=\w)/
+        ALNUM_QUOTE  = PragmaticTokenizer::Languages::Common::SingleQuotes::ALNUM_QUOTE
+        QUOTE_WORD   = PragmaticTokenizer::Languages::Common::SingleQuotes::QUOTE_WORD
         QUOTE_NOT_TWAS1 = /(\W|^)'(?!twas)/i
         QUOTE_NOT_TWAS2 = /(\W|^)‘(?!twas)/i
 

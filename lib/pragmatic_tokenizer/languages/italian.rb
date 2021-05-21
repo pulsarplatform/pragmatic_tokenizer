@@ -41,8 +41,8 @@ module PragmaticTokenizer
           text.gsub!(DEGL_APOSTROPHE, '\1 degl' << replacement << ' ')
           text.gsub!(NEGL_APOSTROPHE, '\1 negl' << replacement << ' ')
           text.gsub!(SUGL_APOSTROPHE, '\1 sugl' << replacement << ' ')
+          text.gsub!(QUOTE_WORD,   ' '    << replacement << ' ')
           text.gsub!(ALNUM_QUOTE,  '\1 '  << replacement << ' ')
-          text.gsub!(QUOTE_WORD,   ' '    << replacement)
           text
         end
       end
