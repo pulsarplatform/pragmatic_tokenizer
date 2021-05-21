@@ -20,11 +20,11 @@ module PragmaticTokenizer
         T_APOSTROPHE = / t'/i
         M_APOSTROPHE = / m'/i
         S_APOSTROPHE = / s'/i
-        QUELQU_APOSTROPHE = / quelqu'/i
-        JUSQU_APOSTROPHE = / jusqu'/i
-        LORSQU_APOSTROPHE = / lorsqu'/i
-        PUISQU_APOSTROPHE = / puisqu'/i
-        QUOIQU_APOSTROPHE = / quoiqu'/i
+        QUELQU_APOSTROPHE = /quelqu'/i
+        JUSQU_APOSTROPHE = /jusqu'/i
+        LORSQU_APOSTROPHE = /lorsqu'/i
+        PUISQU_APOSTROPHE = /puisqu'/i
+        QUOIQU_APOSTROPHE = /quoiqu'/i
 
         def handle_single_quotes(text)
           replacement = PragmaticTokenizer::Languages::Common::PUNCTUATION_MAP["'".freeze]
