@@ -11,20 +11,20 @@ module PragmaticTokenizer
         # why can't we directly reference constants from Languages::Common?
         ALNUM_QUOTE  = PragmaticTokenizer::Languages::Common::SingleQuotes::ALNUM_QUOTE
         QUOTE_WORD   = PragmaticTokenizer::Languages::Common::SingleQuotes::QUOTE_WORD
-        C_APOSTROPHE = /c'/i
-        J_APOSTROPHE = /j'/i
-        L_APOSTROPHE = /l'/i
-        D_APOSTROPHE = /d'/i
-        QU_APOSTROPHE = /qu'/i
-        N_APOSTROPHE = /n'/i
-        T_APOSTROPHE = /t'/i
-        M_APOSTROPHE = /m'/i
-        S_APOSTROPHE = /s'/i
-        QUELQU_APOSTROPHE = /quelqu'/i
-        JUSQU_APOSTROPHE = /jusqu'/i
-        LORSQU_APOSTROPHE = /lorsqu'/i
-        PUISQU_APOSTROPHE = /puisqu'/i
-        QUOIQU_APOSTROPHE = /quoiqu'/i
+        C_APOSTROPHE = / c'/i
+        J_APOSTROPHE = / j'/i
+        L_APOSTROPHE = / l'/i
+        D_APOSTROPHE = / d'/i
+        QU_APOSTROPHE = / qu'/i
+        N_APOSTROPHE = / n'/i
+        T_APOSTROPHE = / t'/i
+        M_APOSTROPHE = / m'/i
+        S_APOSTROPHE = / s'/i
+        QUELQU_APOSTROPHE = / quelqu'/i
+        JUSQU_APOSTROPHE = / jusqu'/i
+        LORSQU_APOSTROPHE = / lorsqu'/i
+        PUISQU_APOSTROPHE = / puisqu'/i
+        QUOIQU_APOSTROPHE = / quoiqu'/i
 
         def handle_single_quotes(text)
           replacement = PragmaticTokenizer::Languages::Common::PUNCTUATION_MAP["'".freeze]
